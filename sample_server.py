@@ -1,11 +1,7 @@
-# Logging server process and workers
------
-
-## Usage
-```Python
 from source.logging_server import LoggingServer
 import logging
 import logging.handlers
+import signal
 
 if __name__ == '__main__':
 
@@ -51,6 +47,8 @@ if __name__ == '__main__':
     }
     server = LoggingServer(host, port, config=config)
 
+    signal.signal(signal.SIGINT, lambda *argv: server.shutdown(force=True))
+
     try:
         server.start()
 
@@ -63,5 +61,3 @@ if __name__ == '__main__':
             server.join(10)
     finally:
         server.join()
-
-```
